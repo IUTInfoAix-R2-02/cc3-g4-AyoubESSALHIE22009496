@@ -52,6 +52,7 @@ public class ToileController implements Initializable {
 
     private ObservableList<Circle> circlesList = FXCollections.observableArrayList();
     private ObservableList<Line>   linesList = FXCollections.observableArrayList();
+    private boolean linesTraced = false;
 
 
     private static int rayonCercleExterieur = 200;
@@ -85,6 +86,9 @@ public class ToileController implements Initializable {
         }
         circlesList.get(axe-1).setCenterX(getXRadarChart(noteList.get(axe-1).get(),axe));
         circlesList.get(axe-1).setCenterY(getYRadarChart(noteList.get(axe-1).get() ,axe));
+        if (linesTraced){
+            traceLines();
+        }
     }
 
     @FXML
@@ -102,7 +106,7 @@ public class ToileController implements Initializable {
     }
 
     @FXML
-    private void handleTraceButton(ActionEvent event){
+    private void traceLines(){
         for (SimpleDoubleProperty notes : noteList) {
             if (notes.get() == -1)
                 return;
@@ -121,6 +125,7 @@ public class ToileController implements Initializable {
                 linesList.get(i).setEndY(getYRadarChart(noteList.get(i + 1).getValue(), i + 2));
             }
         }
+        linesTraced = true;
     }
 
     int getXRadarChart(double value, int axe ){

@@ -112,7 +112,7 @@
             </font></Label>
          <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="129.0" spacing="20.0">
             <children>
-               <Button mnemonicParsing="false" text="Tracer" onAction="#handleTraceButton"/>
+               <Button mnemonicParsing="false" text="Tracer" onAction="#traceLines"/>
                <Button mnemonicParsing="false" text="Vider" onAction="#handleEmptyButton" />
             </children>
             <padding>
