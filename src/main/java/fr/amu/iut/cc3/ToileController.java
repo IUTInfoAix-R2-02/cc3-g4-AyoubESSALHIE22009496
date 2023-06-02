@@ -90,9 +90,6 @@ public class ToileController implements Initializable {
         int axe = Integer.parseInt((String) sourceOfEvent.getUserData());
         double note = 0;
         try {
-//            noteList.get(axe-1).setValue(Double.parseDouble(sourceOfEvent.getText()));
-//            wrongGradesTyped.setValue(noteList.get(axe-1).get() < 0 || noteList.get(axe-1).get()  > noteMaximale);
-//            if (wrongGradesTyped.get()) { return; }
             note = Double.parseDouble(sourceOfEvent.getText());
             wrongGradesTyped.setValue(note < 0 || note  > noteMaximale);
             if (wrongGradesTyped.get()) { return; }
