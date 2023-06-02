@@ -106,11 +106,14 @@
                </TextField>
             </children>
          </GridPane>
-         <Label fx:id="errorLabel" textFill="RED" />
+         <Label fx:id="errorLabel" textFill="RED">
+            <font>
+               <Font size="12.0" />
+            </font></Label>
          <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="129.0" spacing="20.0">
             <children>
                <Button mnemonicParsing="false" text="Tracer" />
-               <Button mnemonicParsing="false" text="Vider" />
+               <Button mnemonicParsing="false" text="Vider" onAction="#handleEmptyButton" />
             </children>
             <padding>
                <Insets right="15.0" />

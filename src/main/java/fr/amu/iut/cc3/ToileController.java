@@ -1,9 +1,11 @@
 package fr.amu.iut.cc3;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -46,39 +48,52 @@ public class ToileController implements Initializable {
 
     private BooleanProperty wrongGradesTyped = new SimpleBooleanProperty(false);
 
-    private Circle[] cerclesList = new Circle[6];
+    private ObservableList<SimpleDoubleProperty> noteList = FXCollections.observableArrayList();
+
+    private ObservableList<Circle> circlesList = FXCollections.observableArrayList();
+
 
     private static int rayonCercleExterieur = 200;
     private static int angleEnDegre = 60;
     private static int angleDepart = 90;
     private static int noteMaximale = 20;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         errorLabel.textProperty().bind(Bindings.when(wrongGradesTyped).then("Erreur de Saisie :\nLes valeurs doivent être entre 0 et 20").otherwise(""));
+        for (int i = 0; i < 6; ++i){
+            noteList.add(new SimpleDoubleProperty(-1));
+            circlesList.add(new Circle(5));
+            circlesList.get(i).visibleProperty().bind(noteList.get(i).isNotEqualTo(-1));
+            toile.getChildren().add(circlesList.get(i));
+        }
     }
     @FXML
     private void handleFieldAction(ActionEvent event) {
         TextField sourceOfEvent = (TextField) event.getSource();
-        double note = 0;
+        int axe = Integer.parseInt((String) sourceOfEvent.getUserData());
         try {
-            note = Double.parseDouble(sourceOfEvent.getText());
-            wrongGradesTyped.setValue(note < 0 || note > noteMaximale);
+            noteList.get(axe-1).setValue(Double.parseDouble(sourceOfEvent.getText()));
+            wrongGradesTyped.setValue(noteList.get(axe-1).get() < 0 || noteList.get(axe-1).get()  > noteMaximale);
             if (wrongGradesTyped.get()) { return; }
         } catch (NumberFormatException nfe) {
             return;
         }
+        circlesList.get(axe-1).setCenterX(getXRadarChart(noteList.get(axe-1).get(),axe));
+        circlesList.get(axe-1).setCenterY(getYRadarChart(noteList.get(axe-1).get() ,axe));
+    }
 
-        int axe = Integer.parseInt((String) sourceOfEvent.getUserData());
-
-        if (cerclesList[axe-1] == null) {
-            cerclesList[axe - 1] = new Circle(getXRadarChart(note, axe),getYRadarChart(note, axe), 5);
-            toile.getChildren().add(cerclesList[axe - 1]);
-        }
-        else {
-            cerclesList[axe-1].setCenterX(getXRadarChart(note,axe));
-            cerclesList[axe-1].setCenterY(getYRadarChart(note,axe));
+    @FXML
+    private void handleEmptyButton(ActionEvent event){
+        comp1.setText("");
+        comp2.setText("");
+        comp3.setText("");
+        comp4.setText("");
+        comp5.setText("");
+        comp6.setText("");
+        errorLabel.setText("");
+        for (SimpleDoubleProperty note : noteList){
+            note.setValue(-1);
         }
     }
 
