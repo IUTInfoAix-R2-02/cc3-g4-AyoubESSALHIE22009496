@@ -74,38 +74,39 @@
                      <Font size="12.0" />
                   </font>
                </Label>
-               <TextField fx:id="comp1" userData="1" GridPane.columnIndex="1" onAction="#handleFieldAction">
+               <TextField fx:id="comp1" onAction="#handleFieldAction" userData="1" GridPane.columnIndex="1">
                   <GridPane.margin>
                      <Insets right="20.0" />
                   </GridPane.margin>
                </TextField>
-               <TextField fx:id="comp2" userData="2" layoutX="10.0" layoutY="33.0" GridPane.columnIndex="1" GridPane.rowIndex="1" onAction="#handleFieldAction">
+               <TextField fx:id="comp2" layoutX="10.0" layoutY="33.0" onAction="#handleFieldAction" userData="2" GridPane.columnIndex="1" GridPane.rowIndex="1">
                   <GridPane.margin>
                      <Insets right="20.0" />
                   </GridPane.margin>
                </TextField>
-               <TextField fx:id="comp3" userData="3" layoutX="10.0" layoutY="33.0" GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#handleFieldAction">
+               <TextField fx:id="comp3" layoutX="10.0" layoutY="33.0" onAction="#handleFieldAction" userData="3" GridPane.columnIndex="1" GridPane.rowIndex="2">
                   <GridPane.margin>
                      <Insets right="20.0" />
                   </GridPane.margin>
                </TextField>
-               <TextField fx:id="comp4" userData="4" layoutX="10.0" layoutY="33.0" GridPane.columnIndex="1" GridPane.rowIndex="3" onAction="#handleFieldAction">
+               <TextField fx:id="comp4" layoutX="10.0" layoutY="33.0" onAction="#handleFieldAction" userData="4" GridPane.columnIndex="1" GridPane.rowIndex="3">
                   <GridPane.margin>
                      <Insets right="20.0" />
                   </GridPane.margin>
                </TextField>
-               <TextField fx:id="comp5" userData="5" layoutX="10.0" layoutY="33.0" GridPane.columnIndex="1" GridPane.rowIndex="4" onAction="#handleFieldAction">
+               <TextField fx:id="comp5" layoutX="10.0" layoutY="33.0" onAction="#handleFieldAction" userData="5" GridPane.columnIndex="1" GridPane.rowIndex="4">
                   <GridPane.margin>
                      <Insets right="20.0" />
                   </GridPane.margin>
                </TextField>
-               <TextField fx:id="comp6" userData="6" layoutX="10.0" layoutY="33.0" GridPane.columnIndex="1" GridPane.rowIndex="5" onAction="#handleFieldAction">
+               <TextField fx:id="comp6" layoutX="10.0" layoutY="33.0" onAction="#handleFieldAction" userData="6" GridPane.columnIndex="1" GridPane.rowIndex="5">
                   <GridPane.margin>
                      <Insets right="20.0" />
                   </GridPane.margin>
                </TextField>
             </children>
          </GridPane>
+         <Label fx:id="errorLabel" textFill="RED" />
          <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="129.0" spacing="20.0">
             <children>
                <Button mnemonicParsing="false" text="Tracer" />

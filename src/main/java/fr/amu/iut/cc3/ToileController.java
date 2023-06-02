@@ -1,9 +1,7 @@
 package fr.amu.iut.cc3;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -12,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -42,6 +41,11 @@ public class ToileController implements Initializable {
     @FXML
     private TextField comp6;
 
+    @FXML
+    private Label errorLabel;
+
+    private BooleanProperty wrongGradesTyped = new SimpleBooleanProperty(false);
+
     private Circle[] cerclesList = new Circle[6];
 
     private static int rayonCercleExterieur = 200;
@@ -52,6 +56,7 @@ public class ToileController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        errorLabel.textProperty().bind(Bindings.when(wrongGradesTyped).then("Erreur de Saisie :\nLes valeurs doivent être entre 0 et 20").otherwise(""));
     }
     @FXML
     private void handleFieldAction(ActionEvent event) {
@@ -59,10 +64,14 @@ public class ToileController implements Initializable {
         double note = 0;
         try {
             note = Double.parseDouble(sourceOfEvent.getText());
+            wrongGradesTyped.setValue(note < 0 || note > noteMaximale);
+            if (wrongGradesTyped.get()) { return; }
         } catch (NumberFormatException nfe) {
             return;
         }
+
         int axe = Integer.parseInt((String) sourceOfEvent.getUserData());
+
         if (cerclesList[axe-1] == null) {
             cerclesList[axe - 1] = new Circle(getXRadarChart(note, axe),getYRadarChart(note, axe), 5);
             toile.getChildren().add(cerclesList[axe - 1]);
