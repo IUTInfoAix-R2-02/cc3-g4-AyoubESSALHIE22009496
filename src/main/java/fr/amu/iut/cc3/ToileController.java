@@ -50,6 +50,10 @@ public class ToileController implements Initializable {
 
     private ObservableList<SimpleDoubleProperty> noteList = FXCollections.observableArrayList();
 
+    private ObservableList<SimpleIntegerProperty> xValues = FXCollections.observableArrayList();
+
+    private ObservableList<SimpleIntegerProperty> YValues = FXCollections.observableArrayList();
+
     private ObservableList<Circle> circlesList = FXCollections.observableArrayList();
     private ObservableList<Line>   linesList = FXCollections.observableArrayList();
     private boolean linesTraced = false;
@@ -67,11 +71,18 @@ public class ToileController implements Initializable {
             noteList.add(new SimpleDoubleProperty(-1));
             circlesList.add(new Circle(5));
             linesList.add(new Line());
+            xValues.add(new SimpleIntegerProperty());
+            YValues.add(new SimpleIntegerProperty());
+            setObservablexValues(noteList.get(i),i);
+            setObservableYValues(noteList.get(i),i);
             circlesList.get(i).visibleProperty().bind(noteList.get(i).isNotEqualTo(-1));
+            circlesList.get(i).centerXProperty().bind(xValues.get(i));
+            circlesList.get(i).centerYProperty().bind(YValues.get(i));
             linesList.get(i).visibleProperty().bind(noteList.get(i).isNotEqualTo(-1));
             toile.getChildren().add(circlesList.get(i));
             toile.getChildren().add(linesList.get(i));
         }
+
     }
     @FXML
     private void handleFieldAction(ActionEvent event) {
@@ -83,11 +94,6 @@ public class ToileController implements Initializable {
             if (wrongGradesTyped.get()) { return; }
         } catch (NumberFormatException nfe) {
             return;
-        }
-        circlesList.get(axe-1).setCenterX(getXRadarChart(noteList.get(axe-1).get(),axe));
-        circlesList.get(axe-1).setCenterY(getYRadarChart(noteList.get(axe-1).get() ,axe));
-        if (linesTraced){
-            traceLines();
         }
     }
 
@@ -113,19 +119,20 @@ public class ToileController implements Initializable {
         }
         for (int i = 0, competencesMax = 6; i < competencesMax; ++i) {
             if (i == competencesMax-1){
-                linesList.get(i).setStartX(getXRadarChart(noteList.get(i).getValue(),5+1));
-                linesList.get(i).setStartY(getYRadarChart(noteList.get(i).getValue(),5+1));
-                linesList.get(i).setEndX(getXRadarChart(noteList.get(0).getValue(),1));
-                linesList.get(i).setEndY(getYRadarChart(noteList.get(0).getValue(),1));
+                linesList.get(i).startXProperty().bind(xValues.get(i));
+                linesList.get(i).endXProperty().bind(xValues.get(0));
+                linesList.get(i).startYProperty().bind(YValues.get(i));
+                linesList.get(i).endYProperty().bind(YValues.get(0));
             }
             else {
-                linesList.get(i).setStartX(getXRadarChart(noteList.get(i).getValue(), i + 1));
-                linesList.get(i).setStartY(getYRadarChart(noteList.get(i).getValue(), i + 1));
-                linesList.get(i).setEndX(getXRadarChart(noteList.get(i + 1).getValue(), i + 2));
-                linesList.get(i).setEndY(getYRadarChart(noteList.get(i + 1).getValue(), i + 2));
+                linesList.get(i).startXProperty().bind(xValues.get(i));
+                linesList.get(i).endXProperty().bind(xValues.get(i+1));
+                linesList.get(i).startYProperty().bind(YValues.get(i));
+                linesList.get(i).endYProperty().bind(YValues.get(i+1));
             }
         }
         linesTraced = true;
+        System.out.println(xValues.get(0).getValue());
     }
 
     int getXRadarChart(double value, int axe ){
@@ -138,4 +145,31 @@ public class ToileController implements Initializable {
                 *  (value / noteMaximale));
     }
 
+    public void setObservablexValues(SimpleDoubleProperty note,int i) {
+        IntegerBinding observableXValue = new IntegerBinding() {
+            {
+                super.bind(note);
+            }
+            @Override
+            protected int computeValue() {
+                return getXRadarChart(note.get(),i+1);
+            }
+        };
+        xValues.get(i).bind(observableXValue);
+        System.out.println("bind fait");
+    }
+
+    public void setObservableYValues(SimpleDoubleProperty note,int i) {
+        IntegerBinding observableXValue = new IntegerBinding() {
+            {
+                super.bind(note);
+            }
+            @Override
+            protected int computeValue() {
+                return getYRadarChart(note.get(),i+1);
+            }
+        };
+        YValues.get(i).bind(observableXValue);
+        System.out.println("bind fait");
+    }
 }
