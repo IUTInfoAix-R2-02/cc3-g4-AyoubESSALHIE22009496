@@ -51,6 +51,7 @@ public class ToileController implements Initializable {
     private ObservableList<SimpleDoubleProperty> noteList = FXCollections.observableArrayList();
 
     private ObservableList<Circle> circlesList = FXCollections.observableArrayList();
+    private ObservableList<Line>   linesList = FXCollections.observableArrayList();
 
 
     private static int rayonCercleExterieur = 200;
@@ -64,8 +65,11 @@ public class ToileController implements Initializable {
         for (int i = 0; i < 6; ++i){
             noteList.add(new SimpleDoubleProperty(-1));
             circlesList.add(new Circle(5));
+            linesList.add(new Line());
             circlesList.get(i).visibleProperty().bind(noteList.get(i).isNotEqualTo(-1));
+            linesList.get(i).visibleProperty().bind(noteList.get(i).isNotEqualTo(-1));
             toile.getChildren().add(circlesList.get(i));
+            toile.getChildren().add(linesList.get(i));
         }
     }
     @FXML
@@ -94,6 +98,28 @@ public class ToileController implements Initializable {
         errorLabel.setText("");
         for (SimpleDoubleProperty note : noteList){
             note.setValue(-1);
+        }
+    }
+
+    @FXML
+    private void handleTraceButton(ActionEvent event){
+        for (SimpleDoubleProperty notes : noteList) {
+            if (notes.get() == -1)
+                return;
+        }
+        for (int i = 0, competencesMax = 6; i < competencesMax; ++i) {
+            if (i == competencesMax-1){
+                linesList.get(i).setStartX(getXRadarChart(noteList.get(i).getValue(),5+1));
+                linesList.get(i).setStartY(getYRadarChart(noteList.get(i).getValue(),5+1));
+                linesList.get(i).setEndX(getXRadarChart(noteList.get(0).getValue(),1));
+                linesList.get(i).setEndY(getYRadarChart(noteList.get(0).getValue(),1));
+            }
+            else {
+                linesList.get(i).setStartX(getXRadarChart(noteList.get(i).getValue(), i + 1));
+                linesList.get(i).setStartY(getYRadarChart(noteList.get(i).getValue(), i + 1));
+                linesList.get(i).setEndX(getXRadarChart(noteList.get(i + 1).getValue(), i + 2));
+                linesList.get(i).setEndY(getYRadarChart(noteList.get(i + 1).getValue(), i + 2));
+            }
         }
     }
 
